@@ -1,0 +1,262 @@
+﻿@{
+
+    var systemName = @QSDMS.Util.Config.GetValue("SystemName").ToString();
+    var userId = QSDMS.Model.OperatorProvider.Provider.Current().UserId;
+    var userName = QSDMS.Model.OperatorProvider.Provider.Current().UserName;
+    var headIcon = QSDMS.Model.OperatorProvider.Provider.Current().HeadIcon;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>@systemName</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <link href="~/Content/adminFirst/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/styles/animate.min.css" rel="stylesheet" />
+    <link href="~/Content/styles/font-awesome.min.css" rel="stylesheet" />
+    @*<link href="~/Content/styles/style.min.css" rel="stylesheet" />*@
+    @*<link href="~/Content/styles/bootstrap.min.css" rel="stylesheet" />*@
+    <script src="~/Content/scripts/jquery/jquery-1.10.2.min.js"></script>
+    <script src="~/Content/scripts/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Content/scripts/plugins/cookie/jquery.cookie.js"></script>
+    <script src="~/Content/scripts/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Content/scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Content/scripts/plugins/dialog/dialog.js"></script>
+
+    <script src="~/Content/scripts/plugins/toastr/toastr.min.js"></script>
+    <link href="~/Content/scripts/plugins/toastr/toastr.min.css" rel="stylesheet" />
+
+    <script src="~/Content/scripts/utils/dms-ui.src.js"></script>
+    <script src="~/Content/scripts/utils/dms-clientdata.src.js"></script>
+    @*<link href="~/Content/@QSDMS.Model.OperatorProvider.Provider.Current().Theme/index.min.css" rel="stylesheet" />
+        <link href="~/Content/@QSDMS.Model.OperatorProvider.Provider.Current().Theme/style.min.css" rel="stylesheet" />
+        <script src="~/Content/@QSDMS.Model.OperatorProvider.Provider.Current().Theme/index.src.js"></script>*@
+
+    <link href="~/Content/adminFirst/index.min.css" rel="stylesheet" />
+    <link href="~/Content/adminFirst/style.min.css" rel="stylesheet" />
+    <script src="~/Content/adminFirst/index.src.js"></script>
+    <script type="text/javascript">
+        var contentPath = '@Url.Content("~")'.substr(0, '@Url.Content("~")'.length - 1);
+        $(function () {
+            //首页加载
+            $.dmsindex.load();
+        });
+        //清除缓存
+        function removeCache() {
+            dialogConfirm('注：您确定要此操作吗？', function (r) {
+                if (r) {
+                    $.post("/Home/RemoveCache", null, function (result) {
+                        var rs = eval("(" + result + ")");
+                        if (rs.IsSuccess) {
+                            toastr.success(rs.Message);
+                            top.layer.closeAll();
+                        }
+                        else {
+                            toastr.error(rs.Message);
+                        }
+                    });
+                }
+            });
+        }
+
+        //个人中心
+        function personCenter() {
+            var data = { Icon: "", FullName: "个人中心", Url: "/PersonCenter/Index" }
+            NavFrame(data);
+            //dialogOpen({
+            //    id: "personCenter",
+            //    title: '个人中心',
+            //    url: '/PersonCenter/Index',
+            //    width: "1100px",
+            //    height: "800px",
+            //    btn: null,
+            //    callBack: function (iframeId) {
+            //        top.frames[iframeId].AcceptClick();
+            //    }
+            //});
+        }
+    </script>
+</head>
+<body style="overflow: hidden;">
+    <!-- header -->
+    <header id="header" class="navbar bg bg-black" style="">
+        <ul class="nav navbar-nav navbar-avatar pull-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="hidden-sm-only">bruced</span>
+                    <span class="thumb-small avatar inline"><img src="~/Content/images/head/avatar.png" alt="Mika Sokeil" class="img-circle"></span>
+                    <b class="caret hidden-sm-only"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="" href="javascript:personCenter();">个人信息</a></li>
+                    <li><a href="javascript:removeCache();">清空缓存</a></li>
+                    <li><a href="#" onclick="$.dmsindex.indexOut()">安全退出</a></li>
+                </ul>
+            </li>
+        </ul>
+        <a class="navbar-brand" href="#">Trade</a>
+        @*<button type="button" class="btn btn-link pull-left nav-toggle hidden-lg" data-toggle="class:show" data-target="#nav">
+                <i class="icon-reorder icon-xlarge text-default fa fa-bar-chart-o"></i>
+            </button>*@
+        <button type="button" class="btn btn-link pull-left nav-toggle hidden-lg" data-toggle="class:slide-nav slide-nav-left" data-target="body">
+            <i class="icon-xlarge fa fa-bars"></i>
+        </button>
+        <ul class="nav navbar-nav hidden-sm">
+
+            <li class="dropdown shift" data-toggle="shift:appendTo" data-target=".nav-primary .nav">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="系统风格设置"><i class="icon-cog icon-xlarge fa fa-gear"></i><b class="caret hidden-sm-only"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" data-toggle="class:navbar-fixed" data-target='body'>
+                            头部
+                            <span class="text-active">自动</span>
+                            <span class="text">固定</span>
+                        </a>
+                    </li>
+                    <li class="visible-lg">
+                        <a href="#" data-toggle="class:nav-vertical" data-target="#nav">
+                            菜单
+                            <span class="text-active">竖向</span>
+                            <span class="text">横向</span>
+                        </a>
+                    </li>
+                    <li class="divider hidden-sm"></li>
+                    <li class="dropdown-header">颜色</li>
+                    <li>
+                        <a href="#" data-toggle="class:bg bg-black" data-target='.navbar'>
+                            头部
+                            <span class="text-active">深色</span>
+                            <span class="text">白色</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="class:bg-light" data-target='#nav'>
+                            菜单
+                            <span class="text-active">深色</span>
+                            <span class="text">浅色</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="">
+                <div class="m-t m-b-small" id="panel-notifications">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell icon-xlarge">关怀提醒</i><b class="badge badge-notes bg-danger count-n">0</b></a>
+                    <section class="dropdown-menu m-l-small m-t-mini">
+                        @*<section class="panel panel-large arrow arrow-top">*@
+                        <section class="panel arrow arrow-top">
+                            <div class="list-group list-group-flush m-t-n">
+                                <a href="#" class=" list-group-item">
+                                    回访提醒<b class="badge badge-notes bg-danger count-n">2</b>
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    保养提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    车辆保险提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    驾照年审提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    车辆年检提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    卡到期提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    客户生日提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    客户流失提醒
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    到货提醒
+                                </a>
+                            </div>
+
+                        </section>
+                    </section>
+
+
+                </div>
+            </li>
+            <li class="">
+                <div class="m-t m-b-small" id="panel-notifications">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-book icon-xlarge">业务提醒</i><b class="badge badge-notes bg-danger count-n">2</b></a>
+                    <section class="dropdown-menu m-l-small m-t-mini">
+                        @*<section class="panel panel-large arrow arrow-top">*@
+                        <section class="panel arrow arrow-top">
+                            <div class="list-group list-group-flush m-t-n">
+                                <a href="#" class=" list-group-item">
+                                    未完成工单<b class="badge badge-notes bg-danger count-n">2</b>
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    未结算工单
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    未完工理赔单
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    未结算理赔单
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    未发货调拨单
+                                </a>
+                                <a href="#" class=" list-group-item">
+                                    未收货调拨单
+                                </a>
+                            </div>
+
+                        </section>
+                    </section>
+
+
+                </div>
+            </li>
+        </ul>
+        <div class="navbar-form pull-left shift" action="" data-toggle="shift:appendTo" data-target=".nav-primary">
+            <i class="icon-search text-muted"></i>
+            <input type="text" class="input-small form-control" placeholder="站内搜索...">
+        </div>
+    </header>
+    <!-- / header -->
+    <nav id="nav" class="nav-primary visible-lg nav-vertical" style="height:auto">
+        <ul class="nav" id="side-menu" style=""></ul>
+    </nav>
+    <section id="content">
+        <div class="clearfix" style="background:#fbf6f6;border-bottom:2px solid #dddddd; padding-left:10px">
+            <h4 id="modelTitle"><i class="fa fa-home"></i>首页</h4>
+        </div>
+        <section class="main">
+
+            <div id="mainContent" class="mainContent" style="height:100%">
+                <iframe id="DMS_iframe" class="DMS_iframe" width="100%" height="100%" src="/Home/AdminFirstDesktop" frameborder="0" data-id="/Home/AdminFirstDesktop"></iframe>
+            </div>
+        </section>
+    </section>
+
+    <footer id="footer">
+        <div class="text-center padder clearfix" style="">
+            <p>
+                <small>&copy; qssoft</small><br><br>
+
+            </p>
+        </div>
+    </footer>
+    @*<div id="loading_background" class="loading_background" style="display: none; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #ccc; z-index: 10000;opacity:0.6; overflow: hidden;">
+            <div style="width: 150px; height: 120px; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;text-align:center; border-radius:10px;background:#443f3f;padding:10px;color:#fff;letter-spacing:1px">
+                <img src="/Content/images/loading/loading-4.gif" />
+                <p>正在加载数据...</p>
+            </div>
+        </div>*@
+</body>
+</html>
